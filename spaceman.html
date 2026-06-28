@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ASPACE - ZANS V1.0</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        html, body {
+            background-color: #030008;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+        }
+
+        /* LAYOUT MOBILE-FIRST MURNI (FULLSCREEN DI HP / RAPI DI PC VIA BROWSER) */
+        .mobile-container {
+            width: 100vw;
+            height: 100dvh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 35%, #25094d 0%, #0c021a 50%, #030008 100%) !important;
+        }
+
+        @media (min-width: 480px) {
+            .mobile-container {
+                width: 410px;
+                height: 840px;
+                border-radius: 24px;
+                box-shadow: 0 0 40px rgba(147, 51, 234, 0.6);
+                border: 4px solid rgba(147, 51, 234, 0.3);
+            }
+        }
+
+        /* ANIMASI MECHANISM */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        @keyframes fly-up {
+            0% { transform: translateY(0px) scale(1); opacity: 1; }
+            100% { transform: translateY(-280px) scale(0.5); opacity: 0.2; }
+        }
+        @keyframes fly-down {
+            0% { transform: translateY(-280px) scale(0.5); opacity: 0.2; }
+            100% { transform: translateY(0px) scale(1); opacity: 1; }
+        }
+        @keyframes stars-move {
+            from { background-position: 0 0; }
+            to { background-position: 0 1000px; }
+        }
+        @keyframes gold-shine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes pop-in {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes neon-pulse {
+            0%, 100% { 
+                text-shadow: 0 0 4px #fff, 0 0 10px #eab308;
+                box-shadow: inset 0 0 6px rgba(234,179,8,0.4), 0 0 10px rgba(234,179,8,0.2);
+            }
+            50% { 
+                text-shadow: 0 0 2px #fff, 0 0 5px #eab308;
+                box-shadow: inset 0 0 3px rgba(234,179,8,0.2), 0 0 5px rgba(234,179,8,0.1);
+            }
+        }
+
+        .animate-float { animation: float 2s ease-in-out infinite; }
+        .animate-flyup { animation: fly-up 3s forwards cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .animate-flydown { animation: fly-down 1.2s forwards ease-out; }
+        .animate-pop { animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .neon-glow-btn { animation: neon-pulse 1.5s infinite ease-in-out; }
+
+        .bg-stars {
+            background-image: radial-gradient(#ffffff 1px, transparent 1px), radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+            animation: stars-move 20s linear infinite;
+        }
+        .text-shine-gold {
+            background: linear-gradient(to right, #ffe600, #ff9900, #ffea00, #ffffff, #ffb700);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gold-shine 3s linear infinite;
+        }
+        
+        /* Custom scrollbar untuk riwayat agar tetap estetik di HP */
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.4);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-container bg-stars">
+
+        <div id="auth-screen" class="absolute inset-0 bg-slate-950 bg-stars z-[100] flex flex-col justify-center items-center p-6 transition-all duration-500">
+            <div class="w-24 h-24 mb-4 filter drop-shadow-[0_0_20px_rgba(192,132,252,0.8)] animate-float">
+                <svg viewBox="0 0 120 120" class="w-full h-full">
+                    <rect x="25" y="50" width="20" height="40" rx="5" fill="#6b21a8" />
+                    <rect x="75" y="50" width="20" height="40" rx="5" fill="#6b21a8" />
+                    <rect x="35" y="45" width="50" height="45" rx="14" fill="#a855f7" stroke="#c084fc" stroke-width="2" />
+                    <circle cx="60" cy="38" r="22" fill="#ffffff" stroke="#4c1d95" stroke-width="3"/>
+                    <ellipse cx="60" cy="36" rx="16" ry="11" fill="url(#loginVisorGrad)" />
+                    <rect x="50" y="60" width="20" height="15" rx="4" fill="#f3e8ff" />
+                    <circle cx="60" cy="67" r="4" fill="#ec4899" />
+                    <defs>
+                        <linearGradient id="loginVisorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00f2fe" /><stop offset="100%" stop-color="#4facfe" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            
+            <h2 class="text-2xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-400 text-center">SPACEMAN JP</h2>
+            <p class="text-[8px] text-purple-300 font-black uppercase tracking-widest mb-4">Mobile Locked Engine v1.0</p>
+
+            <div class="w-full max-w-sm bg-black/60 backdrop-blur-md border border-purple-500/30 rounded-2xl p-4">
+                <div id="login-form-panel" class="space-y-3">
+                    <div class="text-center font-black text-[10px] text-purple-300 uppercase tracking-widest">SIGN IN MEMBER</div>
+                    <div class="space-y-0.5">
+                        <label class="text-[9px] text-purple-400 font-bold uppercase block pl-1">Gmail:</label>
+                        <input type="email" id="login-email" value="spacemangacor@gmail.com" class="w-full bg-purple-950/30 border border-purple-500/30 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono">
+                    </div>
+                    <div class="space-y-0.5">
+                        <label class="text-[9px] text-purple-400 font-bold uppercase block pl-1">Sandi:</label>
+                        <input type="password" id="login-pass" value="password123" class="w-full bg-purple-950/30 border border-purple-500/30 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono">
+                    </div>
+                    <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-purple-600 to-yellow-500 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-widest transition active:scale-95">
+                        MASUK GAME ⚡
+                    </button>
+                    <p class="text-center text-[11px] text-purple-400">Belum ada akun? <span onclick="switchAuthMode(true)" class="text-yellow-400 font-black underline cursor-pointer">Daftar</span></p>
+                </div>
+
+                <div id="register-form-panel" class="space-y-2.5 hidden">
+                    <div class="text-center font-black text-[10px] text-yellow-400 uppercase tracking-widest">ID REGISTRATION</div>
+                    <input type="text" id="reg-user" placeholder="Buat Username" class="w-full bg-purple-950/20 border border-purple-500/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                    <input type="email" id="reg-email" placeholder="Alamat Gmail" class="w-full bg-purple-950/20 border border-purple-500/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono">
+                    <select id="reg-bank" class="w-full bg-purple-950/40 border border-purple-500/20 rounded-xl px-3 py-2 text-xs text-white">
+                        <option value="DANA">E-WALLET DANA</option>
+                        <option value="OVO">E-WALLET OVO</option>
+                        <option value="GOPAY">E-WALLET GOPAY</option>
+                    </select>
+                    <input type="text" id="reg-accnum" placeholder="Nomor HP Dana/Ovo" class="w-full bg-purple-950/20 border border-purple-500/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono">
+                    <button onclick="handleRegister()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-widest transition active:scale-95">
+                        SUBMIT DAFTAR 🎉
+                    </button>
+                    <p class="text-center text-[11px] text-purple-400">Sudah terdaftar? <span onclick="switchAuthMode(false)" class="text-purple-300 font-black underline cursor-pointer">Login</span></p>
+                </div>
+            </div>
+        </div>
+
+        <header class="w-full bg-black/70 border-b border-purple-500/20 px-3 py-3 flex justify-between items-center z-50 shrink-0">
+            <button onclick="claimBonus15K()" id="btn-bonus-15k" class="bg-gradient-to-r from-yellow-500 to-amber-500 text-black text-[10px] font-black px-2.5 py-1.5 rounded-lg uppercase tracking-wide transition active:scale-90">
+                🎁 Bonus 15K
+            </button>
+            
+            <div class="flex items-center gap-1.5">
+                <div class="bg-gradient-to-r from-purple-950 to-indigo-950 border border-yellow-400/40 px-3 py-1 rounded-full flex items-center gap-1.5">
+                    <span class="text-yellow-400 font-black text-[10px]">IDR</span>
+                    <span id="balance-display" class="font-mono font-black text-sm text-yellow-300">30.000</span>
+                </div>
+                <button onclick="toggleModal('menu-akun-modal')" class="p-2 bg-purple-900/40 border border-purple-500/30 rounded-xl text-sm active:scale-90 transition">👤</button>
+            </div>
+        </header>
+
+        <main class="flex-1 w-full p-3 flex flex-col justify-between gap-2 overflow-hidden">
+            <div class="flex justify-between items-center shrink-0 gap-2">
+                <div>
+                    <p id="player-status-tag" class="text-[10px] text-green-400 font-black uppercase tracking-wider">MEMBER GACOR</p>
+                    <p class="text-[8px] text-purple-400 font-medium">Status: Live Engine Tracking</p>
+                </div>
+                <div class="flex gap-1.5">
+                    <button onclick="toggleModal('history-modal')" class="bg-purple-900/80 border border-purple-500/40 text-purple-200 text-[10px] font-black px-2.5 py-1.5 rounded-lg uppercase tracking-wide active:scale-95 transition">📜 Riwayat</button>
+                    <button onclick="toggleModal('deposit-modal')" class="bg-gradient-to-r from-amber-500 to-orange-600 text-white text-[10px] font-black px-3 py-1.5 rounded-lg uppercase tracking-wide active:scale-95 transition shadow-md">💳 Depo</button>
+                    <button onclick="toggleModal('withdraw-modal')" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[10px] font-black px-3 py-1.5 rounded-lg uppercase tracking-wide active:scale-95 transition shadow-md">💸 WD</button>
+                </div>
+            </div>
+
+            <div class="relative w-full flex-1 min-h-[220px] bg-black/40 rounded-2xl border border-purple-500/20 overflow-hidden flex flex-col items-center justify-center p-3">
+                <div class="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:15px_15px]"></div>
+                
+                <div class="absolute top-4 text-center z-10">
+                    <div id="multiplier-display" class="text-4xl font-black tracking-tight text-yellow-400 drop-shadow-[0_2px_8px_rgba(234,179,8,0.5)]">1.00x</div>
+                    <div id="status-text" class="text-[9px] font-bold text-purple-300 tracking-widest mt-0.5 uppercase">TAP BET UNTUK TERBANG</div>
+                </div>
+
+                <div id="spaceman-wrapper" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-300">
+                    <div id="spaceman-sprite" class="animate-float w-16 h-16 filter drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+                        <svg viewBox="0 0 120 120" class="w-full h-full">
+                            <rect x="25" y="50" width="16" height="35" rx="4" fill="#581c87" />
+                            <rect x="79" y="50" width="16" height="35" rx="4" fill="#581c87" />
+                            <rect x="35" y="45" width="50" height="42" rx="12" fill="#a855f7" stroke="#d8b4fe" stroke-width="2" />
+                            <circle cx="60" cy="38" r="21" fill="#ffffff" stroke="#3b0764" stroke-width="2.5"/>
+                            <ellipse cx="60" cy="36" rx="15" ry="10" fill="url(#gameVisorGrad)" />
+                            <rect x="48" y="62" width="24" height="14" rx="3" fill="#f3e8ff" />
+                            <defs>
+                                <linearGradient id="gameVisorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#00f2fe" /><stop offset="100%" stop-color="#4facfe" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div id="jetpack-fire" class="h-4 w-4 bg-gradient-to-t from-red-600 via-yellow-400 to-transparent rounded-full blur-[1px] opacity-0"></div>
+                </div>
+
+                <div id="win-overlay" class="absolute inset-0 bg-black/90 backdrop-blur-md hidden flex-col items-center justify-center z-30 p-4">
+                    <div class="text-center scale-90 space-y-1">
+                        <div id="win-icon" class="text-3xl">💥</div>
+                        <h2 id="win-title" class="text-base font-black uppercase">CRASHED</h2>
+                        <p id="win-detail" class="text-[11px] text-purple-300 px-2"></p>
+                        <div id="win-amount" class="text-2xl font-mono font-black text-white">Rp 0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-black/50 backdrop-blur-md rounded-xl p-3 border border-purple-500/20 shrink-0 space-y-2.5">
+                <div>
+                    <span class="text-[9px] font-bold text-purple-400 uppercase tracking-wider block mb-1">Pilih Taruhan:</span>
+                    <div class="grid grid-cols-3 gap-2 text-[11px] font-black font-mono">
+                        <button onclick="setBet(10000, this)" class="bet-btn neon-glow-btn bg-black border border-yellow-400 text-yellow-300 rounded-lg py-2.5 ring-2 ring-yellow-400 transition">10K</button>
+                        <button onclick="setBet(50000, this)" class="bet-btn neon-glow-btn bg-black border border-yellow-400 text-yellow-300 rounded-lg py-2.5 transition">50K</button>
+                        <button onclick="setBet(100000, this)" class="bet-btn neon-glow-btn bg-black border border-yellow-400 text-yellow-300 rounded-lg py-2.5 transition">100K</button>
+                        <button onclick="setBet(250000, this)" class="bet-btn neon-glow-btn bg-black border border-yellow-400 text-yellow-300 rounded-lg py-2.5 transition">250K</button>
+                        <button onclick="setBet(1000000, this)" class="bet-btn neon-glow-btn bg-black border border-yellow-400 text-yellow-300 rounded-lg py-2.5 transition">1JT</button>
+                        <button onclick="setBet(2000000, this)" class="bet-btn neon-glow-btn bg-black border border-yellow-400 text-yellow-300 rounded-lg py-2.5 transition">2JT</button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center bg-purple-950/40 px-3 py-1.5 rounded-lg border border-purple-500/10 text-xs">
+                    <span class="text-purple-300">Bet Aktif:</span>
+                    <span id="current-bet-display" class="font-mono font-black text-yellow-400">Rp 10.000</span>
+                </div>
+
+                <button id="btn-start" onclick="startGame(this)" class="w-full bg-gradient-to-r from-red-500 via-purple-600 to-pink-600 text-white font-black py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-md transition transform active:scale-95">
+                    PASANG TARUHAN (BET)
+                </button>
+            </div>
+        </main>
+
+        <div id="maxwin-celebration-box" class="absolute inset-4 bg-gradient-to-b from-purple-950/98 via-black/98 to-indigo-950/98 border border-yellow-400 rounded-xl hidden flex-col items-center justify-center z-[200] p-4 animate-pop shadow-2xl">
+            <div class="text-center space-y-3 z-10 w-full">
+                <div class="animate-bounce text-4xl">👑</div>
+                <h2 class="text-xl font-black uppercase text-shine-gold tracking-wide">MAXWIN SENSATIONAL</h2>
+                <div class="bg-yellow-400/10 border border-yellow-400/30 rounded-xl py-2 px-3 my-1">
+                    <p class="text-[8px] text-yellow-300 font-bold uppercase">MULTIPLIER HIT</p>
+                    <p id="maxwin-multiplier-text" class="text-3xl font-mono font-black text-yellow-400">500.00x</p>
+                </div>
+                <p id="maxwin-detail-text" class="text-[10px] text-purple-200 px-1"></p>
+                <div>
+                    <p class="text-[8px] text-green-400 font-bold uppercase">KREDIT KEMENANGAN</p>
+                    <div id="maxwin-amount-text" class="text-2xl font-mono font-black text-green-400">Rp 0</div>
+                </div>
+                <button onclick="closeMaxwinBox()" class="mt-3 px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-black text-xs font-black rounded-lg uppercase">KLAIM DANA</button>
+            </div>
+        </div>
+
+        <div id="history-modal" class="absolute inset-0 bg-black/90 backdrop-blur-md hidden flex-col z-[120] p-4">
+            <div class="w-full flex justify-between items-center border-b border-purple-500/20 pb-2 mb-3">
+                <h3 class="text-sm font-black text-yellow-400 uppercase tracking-wider flex items-center gap-1.5">📜 PANEL RIWAYAT AKUN</h3>
+                <button onclick="toggleModal('history-modal')" class="text-xs bg-purple-900/60 border border-purple-500/30 text-purple-300 font-black px-2.5 py-1 rounded-md">TUTUP</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 mb-3">
+                <button id="tab-gameplay" onclick="switchHistoryTab('gameplay')" class="py-2 text-xs font-black uppercase rounded-lg border border-yellow-400 bg-yellow-400 text-black shadow-md transition">🎮 Game Play</button>
+                <button id="tab-withdraw" onclick="switchHistoryTab('withdraw')" class="py-2 text-xs font-black uppercase rounded-lg border border-purple-500/30 bg-purple-950/40 text-purple-300 transition">💸 Penarikan (WD)</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scroll space-y-2 pr-1" id="history-list-box">
+                </div>
+        </div>
+
+        <div id="deposit-modal" class="absolute inset-0 bg-black/85 backdrop-blur-sm hidden items-center justify-center z-[110] p-4">
+            <div class="bg-gradient-to-b from-purple-950 to-indigo-950 border border-purple-500/40 rounded-xl w-full max-w-xs p-4 space-y-3">
+                <h3 class="text-xs font-black text-yellow-400 uppercase tracking-wider">💳 SIMULASI DEPOSIT</h3>
+                
+                <div id="depo-step-form" class="space-y-3">
+                    <div class="space-y-1">
+                        <label class="text-[9px] text-purple-300 font-bold uppercase block pl-0.5">Nominal Transfer:</label>
+                        <input type="number" id="depo-amount-input" placeholder="Contoh: 50000" class="w-full bg-black/40 border border-purple-500/30 rounded-lg px-2.5 py-2 text-xs font-mono text-yellow-300 focus:outline-none">
+                    </div>
+                    <div class="grid grid-cols-3 gap-1 text-[9px] font-bold font-mono">
+                        <button onclick="document.getElementById('depo-amount-input').value = 20000" class="bg-purple-900/40 py-1 rounded border border-purple-500/20 text-white">+20K</button>
+                        <button onclick="document.getElementById('depo-amount-input').value = 100000" class="bg-purple-900/40 py-1 rounded border border-purple-500/20 text-white">+100K</button>
+                        <button onclick="document.getElementById('depo-amount-input').value = 500000" class="bg-purple-900/40 py-1 rounded border border-purple-500/20 text-white">+500K</button>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[9px] text-purple-300 font-bold uppercase block pl-0.5">Channel Pembayaran:</label>
+                        <select id="depo-payment-method" class="w-full bg-black/60 border border-purple-500/30 rounded-lg px-2 py-2 text-xs text-white focus:outline-none">
+                            <option value="QRIS">QRIS SCANNER (Muncul QR Code)</option>
+                            <option value="DANA">E-WALLET DANA INSTANT</option>
+                            <option value="OVO">E-WALLET OVO INSTANT</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="submitDepositInit()" class="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-black py-2 rounded-lg text-xs uppercase tracking-wide">PROSES</button>
+                        <button onclick="toggleModal('deposit-modal')" class="flex-1 bg-purple-900 text-purple-300 font-bold py-2 rounded-lg text-xs uppercase">Batal</button>
+                    </div>
+                </div>
+
+                <div id="depo-step-qr" class="space-y-3 hidden flex-col items-center justify-center text-center">
+                    <p class="text-[10px] text-yellow-400 font-black tracking-wide uppercase">METODE QRIS SIMULASI</p>
+                    <div class="bg-white p-2 rounded-lg border-2 border-yellow-400">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=SpacemanZassDeathSimulatedPaymentOnlyNotReal" alt="Simulated QR Code" class="w-36 h-36">
+                    </div>
+                    <p class="text-[8px] text-red-400 font-bold uppercase tracking-tight">*INI DUMMY QR GAME / BUKAN ASLI*</p>
+                    <div class="bg-black/30 border border-purple-500/20 rounded-lg p-2 w-full">
+                        <span class="text-[9px] text-purple-300 block">Total Pembayaran:</span>
+                        <span id="depo-qr-total-text" class="text-sm font-mono font-black text-yellow-300">Rp 0</span>
+                    </div>
+                    <button onclick="confirmFakeQrPayment()" class="w-full bg-emerald-500 text-black font-black py-2 rounded-lg text-xs uppercase tracking-wide">SAYA SUDAH BAYAR</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="menu-akun-modal" class="absolute inset-0 bg-black/85 backdrop-blur-sm hidden items-center justify-center z-[110] p-4">
+            <div class="bg-gradient-to-b from-purple-950 to-indigo-950 border border-purple-500/40 rounded-xl w-full max-w-xs p-4 space-y-3">
+                <h3 class="text-xs font-black text-yellow-400 uppercase tracking-wider text-center border-b border-purple-500/20 pb-1.5">👤 PROFIL AKUN</h3>
+                <div class="space-y-2 text-[11px] text-purple-200">
+                    <div class="flex justify-between border-b border-purple-900 pb-0.5"><span>Gmail:</span><span id="info-email" class="font-mono text-white"></span></div>
+                    <div class="flex justify-between border-b border-purple-900 pb-0.5"><span>ID User:</span><span id="info-username" class="text-white font-bold"></span></div>
+                    <div class="flex justify-between border-b border-purple-900 pb-0.5"><span>Sistem Bank:</span><span id="info-bank" class="text-white uppercase"></span></div>
+                    <div class="flex justify-between border-b border-purple-900 pb-0.5"><span>Nomor HP:</span><span id="info-rek" class="text-yellow-400 font-mono"></span></div>
+                    
+                    <div class="flex justify-between border-b border-purple-900 pt-1 pb-0.5 font-bold">
+                        <span class="text-pink-400">Developer:</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-yellow-400 font-black">ZassDeath</span>
+                    </div>
+                </div>
+                <button onclick="toggleModal('menu-akun-modal')" class="w-full bg-purple-900 text-purple-200 font-bold py-1.5 rounded-lg text-xs uppercase">Tutup Profil</button>
+            </div>
+        </div>
+
+        <div id="withdraw-modal" class="absolute inset-0 bg-black/85 backdrop-blur-sm hidden items-center justify-center z-[110] p-4">
+            <div class="bg-gradient-to-b from-purple-950 to-indigo-950 border border-purple-500/40 rounded-xl w-full max-w-xs p-4 space-y-2.5">
+                <h3 class="text-xs font-black text-green-400 uppercase">💸 FORMULIR WITHDRAW</h3>
+                
+                <div class="space-y-1">
+                    <label class="text-[9px] text-purple-300 font-bold block pl-0.5 uppercase">Nominal WD:</label>
+                    <input type="number" id="wd-amount-input" placeholder="Minimal 50000" class="w-full bg-black/40 border border-purple-500/30 rounded-lg px-2.5 py-2 text-xs font-mono text-yellow-300 focus:outline-none">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[9px] text-purple-300 font-bold block pl-0.5 uppercase">Kirim Ke Tujuan:</label>
+                    <select id="wd-channel-method" class="w-full bg-black/60 border border-purple-500/30 rounded-lg px-2 py-2 text-xs text-white focus:outline-none">
+                        <option value="DANA">E-WALLET DANA</option>
+                        <option value="OVO">E-WALLET OVO</option>
+                        <option value="GOPAY">E-WALLET GOPAY</option>
+                        <option value="BANK LINK">BANK ACCOUNT LINKED</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-2 pt-1">
+                    <button onclick="processWithdraw()" class="flex-1 bg-green-500 text-black font-black py-2 rounded-lg text-xs uppercase tracking-wide">WD DANA</button>
+                    <button onclick="toggleModal('withdraw-modal')" class="flex-1 bg-purple-900 text-purple-300 font-bold py-2 rounded-lg text-xs uppercase">Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let balance = 30000; 
+        let currentBet = 10000;
+        let isPlaying = false;
+        let bonusClaimed = false;
+        let totalRoundsPlayed = 0; 
+        let temporaryPendingDepoAmount = 0;
+        
+        // Storage Riwayat (Gameplay & Withdraw) agar tersimpan permanen di HP
+        let gameplayHistory = [];
+        let withdrawHistory = [];
+        let currentActiveTab = "gameplay"; 
+
+        let accountData = { email: "spacemangacor@gmail.com", user: "Player_Gacor", bank: "DANA", accNum: "081299554412" };
+
+        const balanceDisplay = document.getElementById('balance-display');
+        const currentBetDisplay = document.getElementById('current-bet-display');
+        const multiplierDisplay = document.getElementById('multiplier-display');
+        const statusText = document.getElementById('status-text');
+        
+        const spacemanWrapper = document.getElementById('spaceman-wrapper');
+        const spacemanSprite = document.getElementById('spaceman-sprite');
+        const jetpackFire = document.getElementById('jetpack-fire');
+        const btnStart = document.getElementById('btn-start');
+        
+        const winOverlay = document.getElementById('win-overlay');
+        const winTitle = document.getElementById('win-title');
+        const winDetail = document.getElementById('win-detail');
+        const winAmount = document.getElementById('win-amount');
+        const winIcon = document.getElementById('win-icon');
+        const btnBonus15k = document.getElementById('btn-bonus-15k');
+
+        const maxwinBox = document.getElementById('maxwin-celebration-box');
+        const maxwinMultiplierText = document.getElementById('maxwin-multiplier-text');
+        const maxwinDetailText = document.getElementById('maxwin-detail-text');
+        const maxwinAmountText = document.getElementById('maxwin-amount-text');
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const isRegistered = localStorage.getItem('spaceman_registered');
+            if (isRegistered === 'true') {
+                const savedData = localStorage.getItem('spaceman_account');
+                if (savedData) accountData = JSON.parse(savedData);
+                document.getElementById('auth-screen').classList.add('hidden', 'pointer-events-none');
+                syncAccountUI();
+            }
+
+            const savedBalance = localStorage.getItem('spaceman_permanent_balance');
+            if (savedBalance !== null) {
+                balance = parseInt(savedBalance);
+            } else {
+                localStorage.setItem('spaceman_permanent_balance', balance);
+            }
+
+            if (localStorage.getItem('spaceman_bonus_claimed') === 'true') {
+                bonusClaimed = true;
+                btnBonus15k.innerText = "✓ CLAIMED"; btnBonus15k.disabled = true;
+                btnBonus15k.className = "bg-purple-900/40 text-purple-400 text-[10px] px-2.5 py-1.5 rounded-lg cursor-not-allowed";
+            }
+
+            // Load data riwayat yang tersimpan lama
+            const savedGameplay = localStorage.getItem('spaceman_gameplay_history');
+            if(savedGameplay) gameplayHistory = JSON.parse(savedGameplay);
+            const savedWithdraw = localStorage.getItem('spaceman_withdraw_history');
+            if(savedWithdraw) withdrawHistory = JSON.parse(savedWithdraw);
+
+            updateBalanceDisplay();
+            renderHistoryUI();
+        });
+
+        function updateBalanceDisplay() {
+            balanceDisplay.innerText = formatRupiah(balance);
+            localStorage.setItem('spaceman_permanent_balance', balance);
+        }
+
+        function formatRupiah(num) { return num.toLocaleString('id-ID'); }
+        
+        function getFormattedDate() {
+            const now = new Date();
+            const d = String(now.getDate()).padStart(2, '0');
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const y = now.getFullYear();
+            const hr = String(now.getHours()).padStart(2, '0');
+            const min = String(now.getMinutes()).padStart(2, '0');
+            return `${d}/${m}/${y} ${hr}:${min}`;
+        }
+
+        function toggleModal(id) { 
+            const m = document.getElementById(id); 
+            m.classList.toggle('hidden'); 
+            m.classList.toggle('flex'); 
+            if(id === 'deposit-modal' && m.classList.contains('hidden')) {
+                document.getElementById('depo-step-form').classList.remove('hidden');
+                document.getElementById('depo-step-qr').classList.add('hidden');
+                document.getElementById('depo-step-qr').classList.remove('flex');
+            }
+            if(id === 'history-modal' && m.classList.contains('flex')) {
+                renderHistoryUI();
+            }
+        }
+
+        /* LOGIC FITUR RIWAYAT DINAMIS */
+        function switchHistoryTab(tabType) {
+            currentActiveTab = tabType;
+            const btnGameplay = document.getElementById('tab-gameplay');
+            const btnWithdraw = document.getElementById('tab-withdraw');
+
+            if(tabType === 'gameplay') {
+                btnGameplay.className = "py-2 text-xs font-black uppercase rounded-lg border border-yellow-400 bg-yellow-400 text-black shadow-md transition";
+                btnWithdraw.className = "py-2 text-xs font-black uppercase rounded-lg border border-purple-500/30 bg-purple-950/40 text-purple-300 transition";
+            } else {
+                btnWithdraw.className = "py-2 text-xs font-black uppercase rounded-lg border border-yellow-400 bg-yellow-400 text-black shadow-md transition";
+                btnGameplay.className = "py-2 text-xs font-black uppercase rounded-lg border border-purple-500/30 bg-purple-950/40 text-purple-300 transition";
+            }
+            renderHistoryUI();
+        }
+
+        function renderHistoryUI() {
+            const container = document.getElementById('history-list-box');
+            container.innerHTML = "";
+
+            if (currentActiveTab === "gameplay") {
+                if (gameplayHistory.length === 0) {
+                    container.innerHTML = `<div class="text-center text-purple-400 font-bold text-xs py-10">Belum ada riwayat taruhan gameplay.</div>`;
+                    return;
+                }
+                gameplayHistory.forEach(item => {
+                    const isWin = item.payout > 0;
+                    const card = document.createElement('div');
+                    card.className = "bg-purple-950/40 border border-purple-500/10 rounded-xl p-2.5 flex justify-between items-center text-[11px]";
+                    card.innerHTML = `
+                        <div>
+                            <div class="font-black text-white uppercase tracking-wide">SPACEMAN FLIGHT</div>
+                            <div class="text-[9px] text-purple-400">${item.date} • Bet: Rp ${formatRupiah(item.bet)}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-mono font-black ${isWin ? 'text-green-400' : 'text-red-400'}">${item.mult}</div>
+                            <div class="text-[10px] font-bold ${isWin ? 'text-green-300' : 'text-slate-400'}">${isWin ? '+Rp ' + formatRupiah(item.payout) : 'Rungkat'}</div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                if (withdrawHistory.length === 0) {
+                    container.innerHTML = `<div class="text-center text-purple-400 font-bold text-xs py-10">Belum ada data penarikan saldo (WD).</div>`;
+                    return;
+                }
+                withdrawHistory.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "bg-purple-950/40 border border-purple-500/10 rounded-xl p-2.5 flex justify-between items-center text-[11px]";
+                    card.innerHTML = `
+                        <div>
+                            <div class="font-black text-green-400 uppercase tracking-wide">💸 WITHDRAW SUCCESS</div>
+                            <div class="text-[9px] text-purple-400">${item.date} • Ke: ${item.method}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-mono font-black text-yellow-300">Rp ${formatRupiah(item.amount)}</div>
+                            <div class="text-[8px] bg-emerald-500/20 text-emerald-400 font-black px-1.5 py-0.5 rounded uppercase mt-0.5 inline-block">BERHASIL</div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function addGameplayRecord(betAmount, multiplier, payoutAmount) {
+            gameplayHistory.unshift({
+                date: getFormattedDate(),
+                bet: betAmount,
+                mult: multiplier.toFixed(2) + "x",
+                payout: payoutAmount
+            });
+            if(gameplayHistory.length > 30) gameplayHistory.pop(); // Batasi maksimal 30 baris data
+            localStorage.setItem('spaceman_gameplay_history', JSON.stringify(gameplayHistory));
+        }
+
+        function addWithdrawRecord(wdAmount, wdMethod) {
+            withdrawHistory.unshift({
+                date: getFormattedDate(),
+                amount: wdAmount,
+                method: wdMethod
+            });
+            if(withdrawHistory.length > 30) withdrawHistory.pop();
+            localStorage.setItem('spaceman_withdraw_history', JSON.stringify(withdrawHistory));
+        }
+
+        function switchAuthMode(isRegister) {
+            if(isRegister) {
+                document.getElementById('login-form-panel').classList.add('hidden');
+                document.getElementById('register-form-panel').classList.remove('hidden');
+            } else {
+                document.getElementById('register-form-panel').classList.add('hidden');
+                document.getElementById('login-form-panel').classList.remove('hidden');
+            }
+        }
+
+        function syncAccountUI() {
+            document.getElementById('player-status-tag').innerText = "VIP • " + accountData.user.toUpperCase();
+            document.getElementById('info-email').innerText = accountData.email;
+            document.getElementById('info-username').innerText = accountData.user;
+            document.getElementById('info-bank').innerText = accountData.bank;
+            document.getElementById('info-rek').innerText = accountData.accNum;
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            if(!email.includes('@')) return alert('Gmail tidak valid!');
+            accountData.email = email; accountData.user = email.split('@')[0];
+            syncAccountUI(); 
+            localStorage.setItem('spaceman_registered', 'true'); 
+            localStorage.setItem('spaceman_account', JSON.stringify(accountData));
+            document.getElementById('auth-screen').classList.add('hidden', 'pointer-events-none');
+        }
+
+        function handleRegister() {
+            const u = document.getElementById('reg-user').value.trim();
+            const e = document.getElementById('reg-email').value.trim();
+            const b = document.getElementById('reg-bank').value;
+            const n = document.getElementById('reg-accnum').value.trim();
+            if(!u || !e || !n) return alert('Data tidak lengkap!');
+            accountData = { email: e, user: u, bank: b, accNum: n };
+            syncAccountUI(); 
+            localStorage.setItem('spaceman_registered', 'true'); 
+            localStorage.setItem('spaceman_account', JSON.stringify(accountData));
+            document.getElementById('auth-screen').classList.add('hidden', 'pointer-events-none');
+        }
+
+        function setBet(amount, element) {
+            if (isPlaying) return;
+            currentBet = amount;
+            currentBetDisplay.innerText = "Rp " + formatRupiah(amount);
+            
+            const buttons = document.querySelectorAll('.bet-btn');
+            buttons.forEach(btn => btn.classList.remove('ring-2', 'ring-yellow-400'));
+            if(element) element.classList.add('ring-2', 'ring-yellow-400');
+        }
+
+        function claimBonus15K() {
+            if (bonusClaimed) return;
+            balance += 15000; updateBalanceDisplay();
+            btnBonus15k.innerText = "✓ CLAIMED"; btnBonus15k.disabled = true;
+            btnBonus15k.className = "bg-purple-900/40 text-purple-400 text-[10px] px-2.5 py-1.5 rounded-lg cursor-not-allowed";
+            bonusClaimed = true;
+            localStorage.setItem('spaceman_bonus_claimed', 'true');
+        }
+
+        function submitDepositInit() {
+            const amountInput = document.getElementById('depo-amount-input').value;
+            const amount = parseInt(amountInput);
+            const method = document.getElementById('depo-payment-method').value;
+
+            if(isNaN(amount) || amount <= 0) return alert("Isi nominal deposit valid!");
+            temporaryPendingDepoAmount = amount;
+
+            if(method === 'QRIS') {
+                document.getElementById('depo-step-form').classList.add('hidden');
+                document.getElementById('depo-qr-total-text').innerText = "Rp " + formatRupiah(amount);
+                document.getElementById('depo-step-qr').classList.remove('hidden');
+                document.getElementById('depo-step-qr').classList.add('flex');
+            } else {
+                balance += temporaryPendingDepoAmount;
+                updateBalanceDisplay();
+                alert(`✓ SIMULASI DEPOSIT ${method} SUKSES!\n\nSaldo sebesar Rp ${formatRupiah(temporaryPendingDepoAmount)} berhasil masuk.`);
+                toggleModal('deposit-modal');
+                document.getElementById('depo-amount-input').value = "";
+            }
+        }
+
+        function confirmFakeQrPayment() {
+            balance += temporaryPendingDepoAmount;
+            updateBalanceDisplay();
+            alert(`✓ METODE QRIS SUKSES!\n\nSimulasi pembayaran selesai. Saldo bertambah Rp ${formatRupiah(temporaryPendingDepoAmount)}`);
+            toggleModal('deposit-modal');
+            document.getElementById('depo-amount-input').value = "";
+        }
+
+        function startGame(element) {
+            if (isPlaying) return;
+            if (balance < currentBet) return alert("Saldo Anda Kurang!");
+
+            balance -= currentBet; updateBalanceDisplay();
+
+            isPlaying = true;
+            btnStart.disabled = true;
+            btnStart.innerText = "TERBANG...";
+            btnStart.className = "w-full bg-purple-950 border border-purple-800 text-purple-400 py-3.5 rounded-xl text-xs uppercase tracking-widest cursor-not-allowed";
+            
+            winOverlay.classList.add('hidden');
+            maxwinBox.classList.add('hidden');
+            
+            jetpackFire.classList.remove('opacity-0');
+            spacemanWrapper.classList.remove('animate-flydown');
+            spacemanWrapper.classList.add('animate-flyup');
+            statusText.innerText = "SPACEMAN TERBANG KE LANGIT-LANGIT BOX...";
+
+            totalRoundsPlayed++; 
+            let targetMaxwin;
+            let resultType = ""; 
+
+            if (totalRoundsPlayed <= 3) {
+                targetMaxwin = parseFloat((Math.random() * (9.50 - 2.50) + 2.50).toFixed(2)); 
+                resultType = "scatter_receh";
+            } else {
+                let roll = Math.random() * 100;
+                if (roll < 35) {
+                    targetMaxwin = parseFloat((Math.random() * (1.99 - 1.01) + 1.01).toFixed(2)); resultType = "rungkat";
+                } else if (roll < 92) {
+                    targetMaxwin = parseFloat((Math.random() * (18.50 - 2.00) + 2.00).toFixed(2)); resultType = "scatter_receh";
+                } else if (roll < 99) {
+                    targetMaxwin = parseFloat((Math.random() * (95.00 - 18.51) + 18.51).toFixed(2)); resultType = "jackpot_hoki_gede";
+                } else {
+                    targetMaxwin = parseFloat((Math.random() * (2000.00 - 350.00) + 350.00).toFixed(2)); resultType = "maxwin_fixed";
+                }
+            }
+
+            let currentX = 1.00;
+            let intervalSpeed = 30; 
+
+            let gameLoop = setInterval(() => {
+                if (currentX < 5) currentX += 0.05;
+                else if (currentX < 20) currentX += 0.4;
+                else if (currentX < 100) currentX += 3.2;
+                else currentX += 28.5;
+
+                if (currentX >= targetMaxwin) {
+                    currentX = targetMaxwin;
+                    clearInterval(gameLoop);
+                    endGameRound(targetMaxwin, resultType);
+                }
+                multiplierDisplay.innerText = currentX.toFixed(2) + "x";
+            }, intervalSpeed);
+        }
+
+        function endGameRound(finalX, resultType) {
+            statusText.innerText = "CRASHED AT COORDINATE!";
+            jetpackFire.classList.add('opacity-0'); 
+
+            setTimeout(() => {
+                let totalWin = Math.floor(currentBet * finalX);
+
+                if (resultType === "maxwin_fixed") {
+                    balance += totalWin;
+                    maxwinMultiplierText.innerText = finalX.toFixed(2) + "x";
+                    maxwinAmountText.innerText = "Rp " + formatRupiah(totalWin);
+                    maxwinDetailText.innerText = "Selamat! Hit siklus Maxwin langka berhasil ditembus.";
+                    maxwinBox.classList.remove('hidden');
+                    
+                    // Catat ke riwayat gameplay
+                    addGameplayRecord(currentBet, finalX, totalWin);
+                } else {
+                    if (resultType === "rungkat") {
+                        winIcon.innerText = "💥"; winTitle.innerText = "RUNGKAT / CRASHED";
+                        winTitle.className = "text-base font-black text-red-500 uppercase";
+                        winDetail.innerText = "Crash instan! Sistem mendeteksi titik koordinat ekstrim.";
+                        winAmount.innerText = "Rp 0"; winAmount.className = "text-2xl font-mono font-black text-red-400 mt-1";
+                        
+                        // Catat ke riwayat gameplay (Rungkat = payout 0)
+                        addGameplayRecord(currentBet, finalX, 0);
+                    } else {
+                        balance += totalWin;
+                        winIcon.innerText = "✨"; winTitle.innerText = "PASSED CRASH";
+                        winTitle.className = "text-base font-black text-purple-400 uppercase";
+                        winDetail.innerText = `Berhasil lolos sebelum crash di koordinat ${finalX.toFixed(2)}x.`;
+                        winAmount.innerText = "+Rp " + formatRupiah(totalWin);
+                        winAmount.className = "text-2xl font-mono font-black text-green-400 mt-1";
+                        
+                        // Catat ke riwayat gameplay
+                        addGameplayRecord(currentBet, finalX, totalWin);
+                    }
+                    winOverlay.classList.remove('hidden');
+                    
+                    setTimeout(() => { resetGameLayout(); }, 2500);
+                }
+                updateBalanceDisplay();
+            }, 500);
+        }
+
+        function closeMaxwinBox() { maxwinBox.classList.add('hidden'); resetGameLayout(); }
+
+        function resetGameLayout() {
+            winOverlay.classList.add('hidden');
+            spacemanWrapper.classList.remove('animate-flyup');
+            spacemanWrapper.classList.add('animate-flydown');
+            
+            isPlaying = false;
+            btnStart.disabled = false;
+            btnStart.innerText = "PASANG TARUHAN (BET)";
+            btnStart.className = "w-full bg-gradient-to-r from-red-500 via-purple-600 to-pink-600 text-white font-black py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-md transition transform active:scale-95";
+            multiplierDisplay.innerText = "1.00x";
+            statusText.innerText = "TAP BET UNTUK TERBANG";
+        }
+
+        function processWithdraw() {
+            const wdAmount = parseInt(document.getElementById('wd-amount-input').value);
+            const wdMethod = document.getElementById('wd-channel-method').value;
+
+            if (isNaN(wdAmount) || wdAmount <= 0) return alert("Isi nominal valid!");
+            if (wdAmount < 50000) return alert("Minimal penarikan (WD) adalah Rp 50.000");
+            if (wdAmount > balance) return alert("Saldo tidak mencukupi untuk melakukan WD!");
+            
+            balance -= wdAmount; 
+            updateBalanceDisplay();
+
+            // Masukkan data transaksi ke tracker riwayat WD
+            addWithdrawRecord(wdAmount, wdMethod);
+
+            alert(`✓ WD BERHASIL DIAJUKAN!\n\nDana sebesar Rp ${formatRupiah(wdAmount)} berhasil dikirimkan ke akun ${wdMethod} Anda.`);
+            toggleModal('withdraw-modal'); 
+            document.getElementById('wd-amount-input').value = "";
+        }
+    </script>
+</body>
+</html>
